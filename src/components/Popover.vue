@@ -167,6 +167,10 @@ export default {
     contentStyle: {
       type: String,
       default: ""
+    },
+    appendToBody: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -245,9 +249,19 @@ export default {
         this.popperJS = null;
       }
 
+      if (this.appendedToBody) {
+        this.appendedToBody = false;
+        document.body.removeChild(this.popper);
+      }
+
       this.$emit("hide", this);
     },
     createPopper() {
+      if (this.appendToBody && !this.appendedToBody) {
+        this.appendedToBody = true;
+        document.body.appendChild(this.popper);
+      }
+
       if (this.popperJS && this.popperJS.destroy) {
         this.popperJS.destroy();
       }
@@ -260,6 +274,9 @@ export default {
             },
             arrow: {
               element: this.$refs.arrow
+            },
+            preventOverflow: {
+              boundariesElement: document.body
             },
             offset: {
               enabled: true,

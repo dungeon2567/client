@@ -18,6 +18,7 @@
           <Popover
             class="tooltip"
             placement="bottom"
+            appendToBody
           >
             <div style="width: 100px">
               Clique para editar a property '
@@ -33,6 +34,7 @@
           <Popover
             class="tooltip"
             placement="bottom"
+            appendToBody
           >
             <div style="width: 100px">
               Clique para deletar a property '
@@ -89,7 +91,7 @@ export default {
                 {
                   name: "total_area",
                   label: "Área Total",
-                  type: "number"
+                  type: "number",
                 },
                 {
                   name: "city",

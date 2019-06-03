@@ -8,7 +8,7 @@ import Radio from "@/components/Radio.vue";
 import InnerLoading from "@/components/InnerLoading.vue";
 import Suggest from "@/components/Suggest.vue";
 import MultipleSuggest from "@/components/MultipleSuggest.vue";
-import NumberInput from '../components/NumberInput.vue';
+import NumberInput from "../components/NumberInput.vue";
 
 export default {
   props: {
@@ -37,6 +37,38 @@ export default {
     }
   },
   methods: {
+    transformState() {
+      const result = {};
+
+      for (const group of this.formSchema) {
+        for (const field of group.fields) {
+          switch (field.type) {
+            case "text":
+              result[field.name] = this.state[field.name];
+              break;
+            case "number":
+              result[field.name] = this.state[field.name];
+              break;
+            case "date":
+              result[field.name] = this.state[field.name];
+              break;
+            case "select":
+              if (field.multiple) {
+                result[field.name] = this.state[field.name].map(
+                  option => option.value
+                );
+              } else {
+                const option = this.state[field.name];
+
+                result[field.name] = option ? option.value : null;
+              }
+              break;
+          }
+        }
+      }
+
+      return result;
+    },
     async handleSaveClick() {
       this.validate();
 
@@ -49,9 +81,7 @@ export default {
       this.loading = true;
 
       try {
-        let result = await this.save(this.state);
-
-        await this.accept(result);
+        await this.accept(await this.save(this.transformState()));
       } catch (err) {
         for (var e in err) {
           if (err.hasOwnProperty(e)) {
@@ -120,6 +150,7 @@ export default {
         case "number": {
           return (
             <NumberInput
+              clearable={!field.optional}
               onFocus={() => this.$delete(this.errors, field.name)}
               onInput={val => this.$set(this.state, field.name, val)}
               value={this.state[field.name]}
@@ -209,16 +240,9 @@ export default {
             />
           ) : (
             <Suggest
-              inputValueRenderer={val => (val != null ? val.label : "")}
-              value={
-                this.state[field.name] != null
-                  ? field.options.find(
-                      option => option.value === this.state[field.name]
-                    )
-                  : null
-              }
+              value={this.state[field.name]}
               onFocus={() => this.$delete(this.errors, field.name)}
-              onInput={val => this.$set(this.state, field.name, val.value)}
+              onInput={val => this.$set(this.state, field.name, val)}
               search={query =>
                 field.options.filter(
                   option =>
@@ -309,7 +333,7 @@ export default {
               return (
                 <div class="form-group">
                   <label>{group.label}</label>
-                  <div class="divider vertical"/>
+                  <div class="divider vertical" />
                   {this.renderFormGroup(group)}
                 </div>
               );

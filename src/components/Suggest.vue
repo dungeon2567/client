@@ -7,7 +7,7 @@
     @keydown="onKeyDown"
     @focus="onFocus"
     @blur="onBlur"
-    :placeholder="value != null ? inputValueRenderer(value) : placeholder"
+    :placeholder="value ? value.label : placeholder"
   >
     <Popover
       ref="itemsPopover"
@@ -30,7 +30,7 @@
           :key="item.id"
           v-for="(item, index) in items"
         >
-          <pre v-html="renderHtml(inputValueRenderer(item))" />
+          <pre v-html="renderHtml(item.label)" />
           </li>
       </ul>
     </Popover>
@@ -68,12 +68,6 @@ export default {
       default: query => {
         return [];
       }
-    },
-    inputValueRenderer: {
-      type: Function,
-      default: function(val) {
-        return val ? val.text : "";
-      }
     }
   },
   data() {
@@ -81,7 +75,6 @@ export default {
       isOpen: false,
       query: "",
       items: [],
-      focused: false,
       dirt: false,
       selectedIndex: 0
     };
@@ -89,8 +82,8 @@ export default {
   watch: {
     value: {
       handler(newVal, oldVal) {
-        if (newVal != oldVal && !this.focused) {
-          this.query = this.inputValueRenderer(this.value);
+        if (newVal != oldVal && (!this.$refs.input || !this.$refs.input.focused())) {
+          this.query = newVal ? newVal.label : "";
         }
       },
       immediate: true
@@ -144,7 +137,7 @@ export default {
       this.$emit("input", item);
 
       this.$refs.itemsPopover.close();
-      this.query = this.inputValueRenderer(item);
+      this.query = item ? item.label : "";
     },
     clear() {
       this.query = "";
@@ -161,11 +154,11 @@ export default {
 
             this.$emit("input", item);
 
-            this.query = this.inputValueRenderer(item);
+            this.query = item ? item.label : "";
 
             this.$nextTick(() => {
               this.$refs.input.blur();
-              this.$refs.itemsPopover.close()
+              this.$refs.itemsPopover.close();
             });
           }
 
@@ -206,7 +199,7 @@ export default {
 
       this.items = [];
 
-      this.query = this.inputValueRenderer(this.value);
+      this.query = this.value ? this.value.label : "";
 
       this.$emit("hide");
     },
@@ -214,7 +207,6 @@ export default {
       this.$emit("blur");
     },
     onFocus() {
-      this.focused = true;
       this.query = "";
       this.$refs.itemsPopover.show();
     },

@@ -1,5 +1,8 @@
 <template>
-  <div :class="{'text-input': true, minimal: minimal}">
+  <div
+    ref="container"
+    :class="{'text-input': true, minimal: minimal}"
+  >
     <slot name="before" />
     <input
       ref="input"
@@ -74,7 +77,9 @@ export default {
           this.$emit("keyup", event);
         },
         blur: event => {
-          this.amount = this.format(this.value);
+          if (!this.$refs.container.contains(document.activeElement)) {
+            this.amount = this.format(this.value);
+          }
 
           this.$emit("blur", event);
         },
@@ -112,8 +117,13 @@ export default {
       return accounting.unformat(value, ",");
     },
     clear() {
-      this.$emit("input", null);
-      this.focus();
+      this.$nextTick(() => {
+        this.$emit("input", null);
+
+        this.$nextTick(() => {
+          this.focus();
+        });
+      });
     },
     focus() {
       this.$refs.input.focus();

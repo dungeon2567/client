@@ -18,6 +18,7 @@
           <Popover
             class="tooltip"
             placement="bottom"
+            appendToBody
           >
             <div style="width: 100px">
               Clique para editar o grower '
@@ -33,6 +34,7 @@
           <Popover
             class="tooltip"
             placement="bottom"
+            appendToBody
           >
             <div style="width: 100px">
               Clique para deletar o grower '
@@ -59,7 +61,9 @@ export default {
   },
   methods: {
     async editGrower(grower) {
-      const { id, ...initialState } = grower;
+      const initialState = await fetch(
+        "http://localhost:3000/book/50/?fields=id&fields=title&fields=author"
+      ).then(response => response.json());
 
       var data = await this.$forms.open(ReactiveForm, {
         header: "Editar grower",
@@ -70,17 +74,15 @@ export default {
               label: "Dados Básicos",
               fields: [
                 {
-                  name: "name",
-                  label: "Nome",
-                  type: "text",
-                  hint: "Nome do grower"
+                  name: "title",
+                  label: "Título",
+                  type: "text"
                 },
                 {
-                  name: "cpf",
-                  label: "CPF",
-                  type: "text",
-                  mask: "###.###.###-##",
-                  hint: "documento do grower"
+                  name: "author",
+                  label: "Author",
+                  type: "select",
+                  options: [{}, {}, {}, {}, {}]
                 }
               ]
             }

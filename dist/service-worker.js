@@ -1,4 +1,4 @@
-importScripts("/precache-manifest.5153e12b0543636591322526f408ba4d.js", "https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
+importScripts("/precache-manifest.3cc17c9d8a62d93f7746b3b317b852bb.js", "https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 workbox.precaching.cleanupOutdatedCaches();
 
@@ -19,5 +19,9 @@ workbox.precaching.precacheAndRoute(
 
 
 workbox.routing.registerNavigationRoute(
-    workbox.precaching.getCacheKeyForURL('/index.html')
+  workbox.precaching.getCacheKeyForURL("/index.html"), {
+    blacklist: [
+      new RegExp('/api/.*'),
+    ]
+  }
 );

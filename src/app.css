@@ -316,12 +316,19 @@ label {
 	.form-field.text {
 		flex-basis: 50%;
 	}
+
+	.form-field.number {
+		flex-basis: 25%;
+	}
+
 	.form-field.date {
 		flex-basis: 50%;
 	}
+
 	.form-field.select:not(.small) {
 		flex-basis: 50%;
 	}
+
 	.form-field.select.small {
 		flex-grow: 0;
 		flex-basis: auto;
@@ -355,21 +362,6 @@ label {
 .field-error {
 	color: var(--danger-color);
 	font-size: 12px;
-}
-
-::-webkit-scrollbar {
-	height: 18px;
-	width: 18px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-	border-radius: 9px;
-	border: solid 6px transparent;
-	background-clip: content-box;
-}
-
-::-webkit-scrollbar-corner {
-	cursor: pointer;
 }
 
 .notification-container {

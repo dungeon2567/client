@@ -17,7 +17,6 @@ button > .icon {
 }
 
 button {
-  position: relative;
   display: inline-flex;
   flex-direction: row;
   align-items: center;

@@ -3,9 +3,7 @@ import FilterBuilder from "./FilterBuilder.vue";
 import Dropdown from "./Dropdown.vue";
 import Checkbox from "./Checkbox.vue";
 import Button from "./Button.vue";
-
 import accounting from "accounting-js";
-
 export default {
   props: {
     columns: {
@@ -27,7 +25,6 @@ export default {
     },
     visibleRows() {
       const filters = this.filters;
-
       function applyFilter(row) {
         for (const filter of filters) {
           switch (filter.operator) {
@@ -51,10 +48,8 @@ export default {
               break;
           }
         }
-
         return true;
       }
-
       return this.rows.filter(applyFilter);
     }
   },
@@ -90,61 +85,63 @@ export default {
             </ul>
           </Dropdown>
         </div>
-        <div
-          class="data-table"
-          style={{
-            "grid-template-columns": `27px ${this.visibleColumns
-              .map(col => "auto")
-              .join(" ")} auto`
-          }}
-        >
-          <div class="data-table-header">
-            <div class="data-table-header-row">
-              <div class="data-table-header-cell">
-                <Checkbox
-                  onClick={this.toggleSelections}
-                  checked={
-                    this.selected.length === 0
-                      ? false
-                      : this.selected.length === this.visibleRows.length
-                      ? true
-                      : null
-                  }
-                />
-              </div>
-              {this.visibleColumns.map(col => (
-                <div class="data-table-header-cell" key={col.field}>
-                  {col.label}
-                </div>
-              ))}
-              <div class="data-table-header-cell">Ações</div>
-            </div>
-          </div>
-          <div class="data-table-body">
-            {this.visibleRows.map((row, index) => (
-              <div key={row.id} class="data-table-body-row">
-                <div class="data-table-body-cell">
+        <div class="data-table-scrollbar">
+          <div
+            class="data-table"
+            style={{
+              "grid-template-columns": `27px ${this.visibleColumns
+                .map(col => "auto")
+                .join(" ")} auto`
+            }}
+          >
+            <div class="data-table-header">
+              <div class="data-table-header-row">
+                <div class="data-table-header-cell">
                   <Checkbox
-                    checked={this.selected.indexOf(row.id) !== -1}
-                    onClick={() => this.toggleSelection(row)}
+                    onClick={this.toggleSelections}
+                    checked={
+                      this.selected.length === 0
+                        ? false
+                        : this.selected.length === this.visibleRows.length
+                        ? true
+                        : null
+                    }
                   />
                 </div>
                 {this.visibleColumns.map(col => (
-                  <div class="data-table-body-cell" key={col.field}>
-                    {col.multiple
-                      ? row[col.field].map(val => (
-                          <span class="link">
-                            {this.renderCellContent(col, val)}
-                          </span>
-                        ))
-                      : this.renderCellContent(col, row[col.field])}
+                  <div class="data-table-header-cell" style="min-width: 100px" key={col.field}>
+                    {col.label}
                   </div>
                 ))}
-                <div class="data-table-body-cell">
-                  {this.$scopedSlots.actions({ row })}
-                </div>
+                <div class="data-table-header-cell">Ações</div>
               </div>
-            ))}
+            </div>
+            <div class="data-table-body">
+              {this.visibleRows.map((row, index) => (
+                <div key={row.id} class="data-table-body-row">
+                  <div class="data-table-body-cell">
+                    <Checkbox
+                      checked={this.selected.indexOf(row.id) !== -1}
+                      onClick={() => this.toggleSelection(row)}
+                    />
+                  </div>
+                  {this.visibleColumns.map(col => (
+                    <div class="data-table-body-cell" key={col.field}>
+                      {col.multiple
+                        ? row[col.field].map(val => (
+                            <span class="link">
+                              {this.renderCellContent(col, val)}
+                            </span>
+                          ))
+                        : this.renderCellContent(col, row[col.field])}
+                    </div>
+                  ))}
+                  <div class="data-table-body-cell">
+                    {this.$scopedSlots.actions({ row })}
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
@@ -173,7 +170,6 @@ export default {
     },
     toggleSelection(row) {
       let index = this.selected.indexOf(row.id);
-
       if (index !== -1) {
         this.selected.splice(index, 1);
       } else {
@@ -202,44 +198,40 @@ export default {
   display: flex;
   flex-direction: column;
 }
-
 .data-table-filter-container {
   margin-bottom: 10px;
   display: flex;
   flex-wrap: nowrap;
 }
-
 .data-table-filter-container > *:first-child {
   flex-grow: 1;
 }
-
 .data-table-filter-container > *:not(:first-child) {
   margin-left: 8px;
 }
 
-.data-table {
-  background: white;
+.data-table-scrollbar {
+  overflow: auto;
+  max-height: 400px;
+  border: 1px solid #cccccc;
   box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2), 0 2px 2px rgba(0, 0, 0, 0.14),
     0 3px 1px -2px rgba(0, 0, 0, 0.12);
-
-  display: grid;
-  flex-grow: 1;
 }
 
-.drag-handle {
-  cursor: grab;
+.data-table {
+  background: white;
+  display: grid;
+  flex-grow: 1;
 }
 
 .data-table-header,
 .data-table-body {
   display: contents;
 }
-
 .data-table-body-row,
 .data-table-header-row {
   display: contents;
 }
-
 .data-table-header-cell,
 .data-table-body-cell {
   padding: 4px;
@@ -249,17 +241,17 @@ export default {
   font-size: 12px;
   background: #f5f8fa;
 }
-
 .data-table-body-cell:first-child {
   background: var(--table-header-color);
 }
 
 .data-table-body-cell {
   background: #fff;
-  border: 1px solid #cccccc;
-  margin-bottom: -1px;
+  border-right: 1px solid #cccccc;
+  border-bottom: 1px solid #cccccc;
   display: flex;
   flex-wrap: wrap;
+  position: static;
 }
 
 .data-table-body-cell > *:not(:last-child)::after {
@@ -267,25 +259,55 @@ export default {
   margin-right: 4px;
 }
 
-.data-table-body-cell:not(:first-child) {
-  margin-left: -1px;
+.data-table-body-row:last-child > .data-table-body-cell {
+  border-bottom: none;
 }
 
 .data-table-header-cell {
   background: var(--table-header-color);
   font-weight: bold;
   color: var(--contranst-color);
-  border: 1px solid #cccccc;
-  margin-bottom: -1px;
+  border-right: 1px solid #cccccc;
+  border-bottom: 1px solid #cccccc;
   z-index: 2;
   position: sticky;
   top: 0;
 }
 
-.data-table-header-cell:not(:first-child) {
-  margin-left: -1px;
-  min-width: 100px;
+.data-table-body-cell:first-child {
+  border-left: 1px solid #cccccc;
+  position: sticky;
+  left: 0;
+  z-index: 1;
 }
+
+.data-table-header-cell:first-child {
+  border-left: 1px solid #cccccc;
+  position: sticky;
+  left: 0;
+  z-index: 3;
+}
+
+.data-table-body-cell:nth-last-child(2),
+.data-table-header-cell:nth-last-child(2) {
+  border-right: none;
+}
+
+
+.data-table-body-cell:last-child {
+  border-left: 1px solid #cccccc;
+  position: sticky;
+  right: 0;
+  z-index: 1;
+}
+
+.data-table-header-cell:last-child {
+  border-left: 1px solid #cccccc;
+  position: sticky;
+  right: 0;
+  z-index: 3;
+}
+
 
 .table-cell-icon {
   font-size: 16px;
