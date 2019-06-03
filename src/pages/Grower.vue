@@ -81,8 +81,7 @@ export default {
                 {
                   name: "author",
                   label: "Author",
-                  type: "select",
-                  options: [{}, {}, {}, {}, {}]
+                  type: "author",        
                 }
               ]
             }

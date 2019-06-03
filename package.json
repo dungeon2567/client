@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build"
+    "build": "vue-cli-service build",
+    "deploy": "(vue-cli-service build) && (git add .) && (git commit -m \"...\") && (git push -u origin master) && (gcloud app deploy app.yaml --quiet)"
   },
   "dependencies": {
     "@babel/preset-env": "^7.4.5",

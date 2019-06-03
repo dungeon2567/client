@@ -78,7 +78,11 @@ export default {
         },
         blur: event => {
           if (!this.$refs.container.contains(document.activeElement)) {
-            this.amount = this.format(this.value);
+            if (this.value == null) {
+              this.amount = "";
+            } else {
+              this.amount = this.format(this.value);
+            }
           }
 
           this.$emit("blur", event);

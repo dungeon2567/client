@@ -268,25 +268,48 @@ export default {
           );
           break;
         default:
-          return (
-            <div>
-              {field.options.map(option => {
-                return (
-                  <label>
-                    <Radio
-                      value={this.state[field.name] === option.value}
-                      onClick={() =>
-                        this.$set(this.state, field.name, option.value)
-                      }
-                    />
-                    {option.label}
-                  </label>
-                );
-              })}
-            </div>
+          return field.multiple ? (
+            <MultipleSuggest
+              value={this.state[field.name]}
+              onFocus={() => this.$delete(this.errors, field.name)}
+              onInput={val => this.$set(this.state, field.name, val.value)}
+              search={query => this.fetch(field, query)}
+            />
+          ) : (
+            <Suggest
+              value={this.state[field.name]}
+              onFocus={() => this.$delete(this.errors, field.name)}
+              onInput={val => this.$set(this.state, field.name, val)}
+              search={query => this.fetch(field, query)}
+            />
           );
           break;
       }
+    },
+    fetch(field, query) {
+      if (this.abortControllers[field.name] != null) {
+        this.abortControllers[field.name].abort();
+      }
+
+      const controller = new AbortController();
+
+      this.abortControllers[field.name] = controller;
+
+      return fetch(
+        `http://localhost:3000/${field.type}/autocomplete/${encodeURIComponent(
+          query
+        )}`,
+        {
+          method: "GET",
+          signal: controller.signal
+        }
+      )
+        .then(response => response.json())
+        .then(json => {
+          this.abortControllers[field.name] = null;
+
+          return json;
+        });
     },
     renderHintOrError(field) {
       if (this.errors[field.name]) {
@@ -362,6 +385,7 @@ export default {
     return {
       loading: false,
       errors: {},
+      abortControllers: {},
       state: null
     };
   }

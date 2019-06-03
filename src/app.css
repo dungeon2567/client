@@ -313,6 +313,10 @@ label {
 }
 
 @media (min-width: 512px) {
+	.form-field {
+		flex-basis: 50%;
+	}
+
 	.form-field.text {
 		flex-basis: 50%;
 	}

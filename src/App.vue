@@ -79,7 +79,7 @@ export default {
                   exact-active-class="active"
                   exact
                 >
-                  <i class="fas fa-qrcode icon"></i>
+                  <i class="fas fa-qrcode icon" />
                   <span>QRCode Scanner</span>
                 </router-link>
               </ul>
