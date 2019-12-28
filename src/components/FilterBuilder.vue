@@ -72,7 +72,7 @@ export default {
               />
             ) : (
               [
-                <b class="margin-span">{this.filter.column.text}</b>,
+                <b class="margin-span">{this.filter.column.label}</b>,
                 this.filter.operator == null ? (
                   <Suggest
                     key="op"
@@ -104,7 +104,6 @@ export default {
     renderOperator(type, op) {
       return (this.operators[type] || this.operators.default)[op];
     },
-
     renderPredicateValue(predicate) {
       let type = this.getColumnType(predicate.field);
       let op = predicate.operator;
@@ -182,9 +181,10 @@ export default {
       }
     },
     createPredicate() {
+      
       this.value.push({
         operator: this.filter.operator,
-        field: this.filter.column.id,
+        field: this.filter.column.value,
         value: this.filter.value
       });
 
@@ -206,7 +206,7 @@ export default {
       });
     },
     setOperator(op) {
-      this.filter.operator = op.id;
+      this.filter.operator = op.value;
 
       this.$nextTick(() => {
         this.$refs.val.focus();
@@ -246,8 +246,8 @@ export default {
       for (let col of this.columns) {
         if (col.label.toLowerCase().startsWith(query)) {
           results.push({
-            id: col.id,
-            text: col.label
+            value: col.id,
+            label: col.label
           });
         }
       }
@@ -265,8 +265,8 @@ export default {
       )) {
         if (val.startsWith(query)) {
           results.push({
-            id: key,
-            text: val
+            value: key,
+            label: val
           });
         }
       }

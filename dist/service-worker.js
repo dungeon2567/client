@@ -1,4 +1,4 @@
-importScripts("/precache-manifest.93ca8531be5844baf32bd1e153d79a85.js", "https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
+importScripts("/precache-manifest.b55d33c33b6b646530526084d474f50b.js", "https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 workbox.precaching.cleanupOutdatedCaches();
 
