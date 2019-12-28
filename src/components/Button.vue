@@ -41,6 +41,7 @@ button {
 button.small {
   height: 16px;
   width: 16px;
+  font-size: 10px;
 }
 
 button > .icon {
@@ -48,7 +49,7 @@ button > .icon {
 }
 
 button.small > .icon {
-  font-size: 16px;
+  font-size: 14px;
   width: 16px;
 }
 

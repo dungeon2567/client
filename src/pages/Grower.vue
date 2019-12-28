@@ -14,7 +14,7 @@
           class="small primary"
           @click="editGrower(row)"
         >
-          <i class="fas fa-edit icon" />
+          <i class="fas fa-pen icon" />
           <Popover
             class="tooltip"
             placement="bottom"
@@ -30,7 +30,7 @@
           class="small danger"
           @click="deleteGrower(row)"
         >
-          <i class="far fa-trash-alt icon" />
+          <i class="fas fa-trash icon" />
           <Popover
             class="tooltip"
             placement="bottom"
