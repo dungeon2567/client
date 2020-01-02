@@ -36,7 +36,8 @@
   width: 100%;
   display: flex;
   align-items: center;
-  background: white;
+  background: var(--primary-color);
+  color: white;
   z-index: 21;
   padding: 10px;
   flex-shrink: 0;

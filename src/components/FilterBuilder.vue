@@ -258,7 +258,7 @@ export default {
       query = query.toLowerCase();
 
       let results = [];
-      let type = this.getColumnType(this.filter.column.id);
+      let type = this.getColumnType(this.filter.column.value);
 
       for (let [key, val] of Object.entries(
         this.operators[type] || this.operators.default
