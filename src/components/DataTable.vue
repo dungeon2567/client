@@ -35,16 +35,16 @@ export default {
               if (row[filter.field] == filter.value) return false;
               break;
             case "ge":
-              if (+filter.value >= +row[filter.field]) return false;
+              if (+row[filter.field] < +filter.value) return false;
               break;
             case "gt":
-              if (+filter.value > +row[filter.field]) return false;
+              if (+row[filter.field] <= +filter.value) return false;
               break;
             case "le":
-              if (+filter.value <= +row[filter.field]) return false;
+              if ( +row[filter.field] > +filter.value) return false;
               break;
             case "lt":
-              if (+filter.value < +row[filter.field]) return false;
+              if (+row[filter.field] >= +filter.value) return false;
               break;
           }
         }
